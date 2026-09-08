@@ -1,0 +1,821 @@
+/* =========================================================
+   Brook of Cherith, stylesheet
+   Design tokens: deep brook green, warm stone paper, brass accent
+   ========================================================= */
+
+:root {
+  --ink: #1c2b22;
+  --ink-soft: #3c4a41;
+  --paper: #f8f5ee;
+  --stone: #ece6d8;
+  --stone-line: #d9d2bf;
+  --green: #2f4a3c;
+  --green-deep: #223528;
+  --brass: #a9803f;
+  --brass-soft: #c9a05f;
+  --white: #ffffff;
+  --whatsapp: #1f8a4c;
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --shadow-soft: 0 6px 24px rgba(28, 43, 34, 0.12);
+  --header-h: 72px;
+}
+
+/* =========================================================
+   Reset / base. Every rule here exists to prevent the
+   mobile overflow and "zoom" bugs described in the brief.
+   ========================================================= */
+
+* , *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* Prevent iOS/Android auto text inflation, a common source of
+     the page seeming to "zoom" after DOM changes. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* safety net only, real fixes are below */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; height: auto; }
+video { max-width: 100%; display: block; }
+svg { max-width: 100%; }
+
+h1, h2, h3 { font-family: var(--font-display); color: var(--green-deep); margin: 0 0 0.5em; font-weight: 600; }
+p { margin: 0 0 1em; }
+a { color: inherit; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--green-deep);
+  color: var(--white);
+  padding: 0.75rem 1rem;
+  z-index: 200;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.section-head {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  padding: 0 1.25rem;
+  text-align: center;
+}
+.section-head h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+.section-head p { color: var(--ink-soft); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  min-height: 44px; /* comfortable tap target */
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary { background: var(--green); color: var(--white); }
+.btn-primary:hover { background: var(--green-deep); }
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.22); }
+
+.btn-whatsapp { background: var(--whatsapp); color: var(--white); }
+.btn-whatsapp:hover { background: #176e3c; }
+
+.btn-email { background: var(--brass); color: var(--white); }
+.btn-email:hover { background: #8f6a30; }
+
+/* =========================================================
+   Header / navigation
+   Nav bar sits over the hero with a small amount of glass,
+   used deliberately, not on every section.
+   ========================================================= */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: rgba(28, 43, 34, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background-color 0.2s ease;
+}
+.site-header.is-scrolled {
+  background: rgba(28, 43, 34, 0.92);
+}
+
+.nav-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--white);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+}
+.brand-mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brass-soft);
+  display: inline-block;
+}
+
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 1.75rem;
+}
+.nav-links a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.nav-links a:hover { color: var(--brass-soft); }
+.nav-cta {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  margin: 0 auto;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (min-width: 900px) {
+  .nav-links { display: flex; }
+  .hamburger { display: none; }
+}
+
+/* =========================================================
+   Mobile menu
+   FIX: uses inset:0 / 100% (not 100vw) so it can never exceed
+   the layout viewport width. Panel is capped at 320px so it
+   never behaves like a full "huge white area" overlay.
+   ========================================================= */
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 16, 0.55);
+  z-index: 150;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.menu-overlay.is-open { opacity: 1; }
+.menu-overlay[hidden] { display: none; }
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(85%, 320px);
+  height: 100dvh; /* falls back safely, avoids 100vh browser-chrome jump */
+  max-width: 100%;
+  background: var(--paper);
+  z-index: 160;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+}
+.mobile-menu.is-open { transform: translateX(0); }
+
+.mobile-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.mobile-menu-head .brand { color: var(--green-deep); }
+
+.menu-close {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--stone);
+  border-radius: 50%;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 0.9rem 0.25rem;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--stone-line);
+  font-size: 1.05rem;
+}
+.mobile-menu-cta {
+  margin-top: 1.25rem;
+  text-align: center;
+  background: var(--green);
+  color: var(--white) !important;
+  border-radius: var(--radius-sm);
+  border-bottom: none !important;
+}
+
+@media (min-width: 900px) {
+  .mobile-menu, .menu-overlay { display: none; }
+}
+
+/* Body scroll lock while mobile menu is open (JS toggles this class) */
+body.menu-locked {
+  overflow: hidden;
+}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+/* Cap hero height once the layout is desktop-width, instead of always
+   filling the full screen height. This also fixes the large empty gap
+   seen when a mobile browser's "Desktop site" mode forces a wide
+   (~980px) layout viewport: without this cap, 100dvh combined with a
+   bottom-aligned hero stretches far taller than the visible screen. */
+@media (min-width: 900px) {
+  .hero { min-height: min(100dvh, 780px); }
+}
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 30, 22, 0.35) 0%, rgba(15, 22, 17, 0.35) 45%, rgba(12, 18, 14, 0.85) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: var(--white);
+  padding: 0 1.25rem 4rem;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+.hero-location {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+.hero h1 {
+  color: var(--white);
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  margin-bottom: 0.3em;
+  line-height: 1.05;
+}
+.hero-tag {
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 30ch;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+/* =========================================================
+   Overview strip
+   ========================================================= */
+
+.overview {
+  background: var(--green-deep);
+  color: var(--white);
+  align-items: center;
+}
+.overview-list {
+  list-style: none;
+  margin: 0;
+  padding: 2.25rem 1.25rem;
+  max-width: 1180px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  text-align: center;
+  align-items: center;
+  align-content:space-between;
+}
+.overview-list li { display: flex; flex-direction: column; gap: 0.2rem; }
+.overview-list strong { font-family: var(--font-display); font-size: 1.5rem; color: var(--brass-soft); }
+.overview-list span { font-size: 0.85rem; color: rgba(255, 255, 255, 0.75); }
+
+@media (min-width: 700px) {
+  .overview-list { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* =========================================================
+   Apartments
+   ========================================================= */
+
+.apartments { padding: 4.5rem 0; }
+
+.apartment-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+@media (min-width: 800px) {
+  .apartment-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.apartment-card {
+  background: var(--white);
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.apartment-media { aspect-ratio: 4 / 3; overflow: hidden; }
+.apartment-media img { width: 100%; height: 100%; object-fit: cover; }
+.apartment-body { padding: 1.5rem; }
+.apartment-body h3 { font-size: 1.3rem; margin-bottom: 0.2em; }
+/* Sans-serif for currency figures: more reliable glyph coverage for the
+   Naira sign across systems than the display serif, and more legible. */
+.price { font-size: 1.7rem; font-family: var(--font-body); color: var(--green); font-weight: 700; letter-spacing: -0.01em; }
+.price span { font-size: 0.9rem; color: var(--ink-soft); font-weight: 400; letter-spacing: normal; }
+.discount-note { font-size: 0.85rem; color: var(--brass); margin-bottom: 0.75rem; }
+.apartment-desc { color: var(--ink-soft); }
+
+/* =========================================================
+   Gallery
+   ========================================================= */
+
+.gallery-section { padding: 4.5rem 0; background: var(--stone); }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+@media (min-width: 640px) {
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 960px) {
+  .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.gallery-item {
+  border: none;
+  padding: 0;
+  background: none;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.gallery-item:hover img { transform: scale(1.05); }
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(10, 14, 11, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox[hidden] { display: none; }
+.lightbox-img {
+  max-width: min(92vw, 1000px);
+  max-height: 80dvh;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+.lightbox-close, .lightbox-prev, .lightbox-next {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: var(--white);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-close { top: 1rem; right: 1rem; }
+.lightbox-prev { left: 1rem; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 1rem; top: 50%; transform: translateY(-50%); }
+.lightbox-counter {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* =========================================================
+   Video
+   ========================================================= */
+
+.video-section { padding: 4.5rem 0; }
+.video-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+.video-wrap video {
+  width: 100%;
+  border-radius: var(--radius-md);
+  background: #000;
+}
+.video-fallback {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 2rem;
+  border: 1px dashed var(--stone-line);
+  border-radius: var(--radius-md);
+}
+
+/* =========================================================
+   Amenities
+   ========================================================= */
+
+.amenities { padding: 4.5rem 0; background: var(--stone); }
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  padding: 0 1.25rem;
+}
+@media (min-width: 640px) {
+  .amenities-grid { grid-template-columns: repeat(4, 1fr); }
+}
+.amenity {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--white);
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+}
+/* Icon size, weight and color are all set here.
+   To tweak: change font-size to resize, --brass below to recolor.
+   Icon classes themselves (fa-solid fa-wifi, etc) are set in index.html,
+   swap any icon by changing its class, browse more at fontawesome.com/icons */
+.amenity-icon { color: var(--brass); flex-shrink: 0; width: 24px; text-align: center; }
+.amenity-icon i { font-size: 1.25rem; }
+
+.amenity-highlight {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background: var(--green-deep);
+  color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-inline: 1.25rem;
+}
+@media (min-width: 960px) {
+  .amenity-highlight { margin-inline: auto; }
+}
+.amenity-highlight-icon { color: var(--brass-soft); flex-shrink: 0; }
+.amenity-highlight-icon i { font-size: 1.9rem; }
+.amenity-highlight h3 { color: var(--white); font-size: 1.1rem; margin-bottom: 0.2em; }
+.amenity-highlight p { color: rgba(255, 255, 255, 0.8); margin: 0; }
+
+/* =========================================================
+   Booking form
+   ========================================================= */
+
+.booking { padding: 4.5rem 0; }
+.booking-form {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+.form-row { margin-bottom: 1.2rem; }
+.form-row-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--ink);
+}
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 1rem; /* keep >=16px to prevent iOS auto-zoom on focus */
+  font-family: inherit;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--green);
+}
+.apartment-price {
+  font-weight: 600;
+  color: var(--green);
+  margin: 0.5rem 0 0;
+  min-height: 1.2em;
+}
+.field-error {
+  color: #a4302a;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+}
+.form-status {
+  font-size: 0.9rem;
+  color: var(--green);
+  min-height: 1.2em;
+}
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+.form-actions .btn { flex: 1 1 200px; }
+
+/* =========================================================
+   Direct contact
+   ========================================================= */
+
+.direct-contact { padding: 4.5rem 0; background: var(--stone); }
+.direct-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 1.25rem;
+}
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.75rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid var(--stone-line);
+  background: var(--white);
+  color: var(--ink);
+  min-height: 44px;
+}
+.contact-btn-whatsapp { border-color: var(--whatsapp); color: var(--whatsapp); }
+.contact-btn-call { border-color: var(--green); color: var(--green); }
+.contact-btn:hover { background: var(--paper); }
+
+/* =========================================================
+   Location / Channels
+   ========================================================= */
+
+.location { padding: 3.5rem 0 1rem; text-align: center; }
+.map-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+.map-embed {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-md);
+}
+.map-actions {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.channels {
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.channels p:first-child { font-weight: 600; font-size: 1.05rem; }
+.channels-note { font-size: 0.85rem; color: var(--ink-soft); }
+
+/* =========================================================
+   FAQ / accordion
+   ========================================================= */
+
+.faq { padding: 3rem 0 4.5rem; }
+.accordion {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+.accordion-item { border-bottom: 1px solid var(--stone-line); }
+.accordion-trigger {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 1.1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.accordion-trigger::after {
+  content: "+";
+  font-size: 1.3rem;
+  color: var(--brass);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.accordion-trigger[aria-expanded="true"]::after { transform: rotate(45deg); }
+.accordion-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+.accordion-panel p { color: var(--ink-soft); padding-bottom: 1.1rem; margin: 0; }
+
+/* =========================================================
+   Footer
+   ========================================================= */
+
+.site-footer {
+  background: var(--green-deep);
+  color: rgba(255, 255, 255, 0.85);
+}
+.footer-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+}
+.footer-brand { font-family: var(--font-display); font-size: 1.2rem; color: var(--white); }
+.footer-inner a { color: var(--brass-soft); text-decoration: none; }
+.footer-fine { font-size: 0.8rem; color: rgba(255, 255, 255, 0.55); margin-top: 1rem; }
+
+/* =========================================================
+   Floating WhatsApp button
+   FIX: fixed to viewport, high z-index, safe-area aware,
+   positioned clear of bottom nav / form submit buttons.
+   Direct child of <body> with no transformed ancestor.
+   ========================================================= */
+
+.fab-whatsapp {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  z-index: 500;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--whatsapp);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.fab-whatsapp:hover { transform: scale(1.06); }
+.fab-whatsapp:active { transform: scale(0.96); }
+
+@media (max-width: 480px) {
+  .fab-whatsapp { width: 50px; height: 50px; right: 0.85rem; }
+}
+
+/* When the mobile menu is open, tuck the FAB behind the overlay
+   deliberately so it never competes with the menu panel. */
+body.menu-locked .fab-whatsapp {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+/* =========================================================
+   Reduced motion
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
